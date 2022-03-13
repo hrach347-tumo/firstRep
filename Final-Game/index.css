@@ -1,0 +1,71 @@
+﻿body {
+    background-color: #f5f5dc;
+}
+canvas{
+    display: block;
+    margin: auto;
+    border: solid 15px black;
+    border-radius: 4%;
+    margin-top: 15px;
+}
+#h{
+    text-align: center;
+    color: black;
+    margin-left: 30px;
+    font-size: 60px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+canvas:hover {
+    border: solid 14px black;
+    border-radius: 5%;
+    box-shadow: 10px 8px 18px;
+}
+#h:hover {
+    font-size: 57px;
+    text-shadow: 2px 2px 20px;
+}
+.flex{
+    display: flex;
+    justify-content: center;
+}
+#bomb {
+    width: 200px;
+    height: 50px;
+    background: linear-gradient(black,#0f212b);
+    border: solid black 4px;
+    border-radius: 50px;
+    font-size: 20px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: white;
+}
+    #bomb:hover {
+        background: linear-gradient(#0f212b,black);
+        font-size: 18px;
+    }
+    #bomb:active {
+        background: #0f212b;
+        font-size: 22px;
+        border-width: 7px;
+    }
+#fire {
+    width: 200px;
+    height: 50px;
+    background: linear-gradient(black,red);
+    border: solid black 4px;
+    border-radius: 50px;
+    font-size: 20px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: white;
+    margin-left: 40px;
+}
+
+    #fire:hover {
+        background: linear-gradient(red,black);
+        font-size: 18px;
+    }
+
+    #fire:active {
+        background: #7d2114;
+        font-size: 22px;
+        border-width: 7px;
+    }
