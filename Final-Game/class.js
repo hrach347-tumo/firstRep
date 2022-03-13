@@ -32,12 +32,12 @@ class LivingCreature {
     }
 }
 class Grass extends LivingCreature{
-    constructor(x, y, index) {
+    constructor(x, y, index,multiplay,directions) {
         super(x,y,index,multiplay,directions);
     }
 
     chooseCell(character) {
-        return super(this.chooseCell(character));
+        return super.chooseCell(character);
     }
     mul() {
 
@@ -58,7 +58,7 @@ class Grass extends LivingCreature{
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class GrassEater extends LivingCreature{
-    constructor(x, y, index) {
+    constructor(x, y, index,multiplay) {
         super(x,y,index,multiplay);
         this.directions = [];
     }
@@ -77,7 +77,7 @@ class GrassEater extends LivingCreature{
 
     chooseCell(character) {
         this.getNewCordinates()
-        super(this.chooseCell(character));
+        super.chooseCell(character);
 
     }
     mul() {
