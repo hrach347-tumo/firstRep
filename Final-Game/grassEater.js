@@ -1,4 +1,5 @@
 let LivingCreature = require("./LivingCreature")
+let rand = require("./rand")
 module.exports=class GrassEater extends LivingCreature{
     constructor(x, y, index,multiplay) {
         super(x,y,index,multiplay);
@@ -22,7 +23,7 @@ module.exports=class GrassEater extends LivingCreature{
         return super.chooseCell(character);
     }
     mul() {
-        var newCell = random(this.chooseCell(0));
+        var newCell = rand(this.chooseCell(0));
 
         if (this.multiplay >= 8 && newCell) {
             let xx = newCell[0]
@@ -34,7 +35,7 @@ module.exports=class GrassEater extends LivingCreature{
         this.multiplay++
     }
     move() {
-        let newCell = random(this.chooseCell(0))
+        let newCell = rand(this.chooseCell(0))
         if (newCell) {
             let xx = newCell[0]
             let yy = newCell[1]
@@ -53,7 +54,7 @@ module.exports=class GrassEater extends LivingCreature{
 
     }
     eat() {
-        let newCell = random(this.chooseCell(1))
+        let newCell = rand(this.chooseCell(1))      
         if (newCell) {
             let xx = newCell[0]
             let yy = newCell[1]

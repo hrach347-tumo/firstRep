@@ -1,7 +1,7 @@
 var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
-var io = require('socket.io')(server);
+io = require('socket.io')(server);
 var fs = require("fs")
 
 app.use(express.static("."));
@@ -12,48 +12,24 @@ app.get("/", function (req, res) {
 server.listen(8000)
 
 
-let Grass = require("./Grass")
-let grassEater = require("./grassEater")
-let Predator = require("./Predator")
-let Bomb = require("./Bomb")
-let Rocket = require("./Rocket")
+Grass = require("./Grass")
+GrassEater = require("./GrassEater")
+Predator = require("./Predator")
+Bomb = require("./Bomb")
+Rocket = require("./Rocket")
 
+grassArr = []
+grassEaterArr = []
+predatorArr = []
+bombArr = []
+rocketArr = []
 
-let matrix = [
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-
-
-];
+matrix = [];
 
 function fillMatrix() {
-    for (let i in matrix) {
-        for (let i in matrix) {
+    for (let i = 0; i < 27; i++) {
+        matrix[i] = []
+        for (let j = 0; j < 27; j++) {
             matrix[i].push(Math.round(Math.random() * 1.6))
         }
     }
@@ -66,16 +42,10 @@ function fillMatrix() {
     }
 }
 
+
 fillMatrix()
 
-io.sockets.emit('sm',matrix)
-
-var side = 20;
-let grassArr = []
-let grassEaterArr = []
-let predatorArr = []
-let bombArr = []
-let rocketArr = []
+io.sockets.emit('sm', matrix)
 
 function generator() {
 
@@ -94,36 +64,39 @@ function generator() {
         }
     }
 
+    io.sockets.emit('sm', matrix)
 }
 
-function work(){
-   for (let i = 0; i < grassArr.length; i++) {
-    grassArr[i].mul();
+function work() {
+    for (let i = 0; i < grassArr.length; i++) {
+        grassArr[i].mul();
+    }
+    for (let i = 0; i < grassEaterArr.length; i++) {
+        grassEaterArr[i].eat()
+    }
+    for (let i = 0; i < bombArr.length; i++) {
+        bombArr[i].blowUp()
+    }
+    for (let i = 0; i < predatorArr.length; i++) {
+        predatorArr[i].eat()
+    }
+    for (let i = 0; i < rocketArr.length; i++) {
+        rocketArr[i].fly()
+    }
+    io.sockets.emit('sm', matrix)
 }
-for (let i = 0; i < grassEaterArr.length; i++) {
-    grassEaterArr[i].eat()
-}
-for (let i = 0; i < bombArr.length; i++) {
-    bombArr[i].blowUp()
-}
-for (let i = 0; i < predatorArr.length; i++) {
-    predatorArr[i].eat()
-}
-for (let i = 0; i < rocketArr.length; i++) {
-    rocketArr[i].fly()
-} 
-}
-setInterval(work, 500)
+setInterval(work, 10)
 
-let x;
-let y;
+
 function bomb_plant() {
+    let x;
+    let y;
     x = Math.floor(Math.random() * matrix[0].length)
     y = Math.floor(Math.random() * matrix.length)
     matrix[y][x] = 4
     console.log("Bomb Planted")
     bombArr.push(new Bomb(x, y))
-    io.sockets.emit("sm", matrix);
+    io.sockets.emit('sm', matrix)
 }
 let randY;
 function rocket_plant() {
@@ -136,11 +109,16 @@ function rocket_plant() {
     else {
         rocket_plant()
     }
-    io.sockets.emit("sm", matrix);
+    io.sockets.emit('sm', matrix);
 }
+function light_plant() {
+    console.log("lightning")
+    io.sockets.emit('sm', matrix);
+}
+
 io.on('connection', function (socket) {
     generator();
-    socket.on("kill", kill);
-    socket.on("add grass", addGrass);
-    socket.on("add grassEater", addGrassEater);
+    socket.on("bomb", bomb_plant);
+    socket.on("rocket", rocket_plant);
+    socket.on("light", light_plant)
 });
