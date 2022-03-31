@@ -1,6 +1,11 @@
 ﻿body {
     background-color: #f5f5dc;
 }
+@keyframes spark{
+    100% {
+        background: #101738
+    }
+}
 canvas{
     display: block;
     margin: auto;

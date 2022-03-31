@@ -1,6 +1,7 @@
 var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
+var weath = "winter"
 io = require('socket.io')(server);
 var fs = require("fs")
 
@@ -11,18 +12,20 @@ app.get("/", function (req, res) {
 })
 server.listen(8000)
 
-
 Grass = require("./Grass")
 GrassEater = require("./GrassEater")
 Predator = require("./Predator")
 Bomb = require("./Bomb")
 Rocket = require("./Rocket")
+Light = require("./Light")
 
 grassArr = []
 grassEaterArr = []
 predatorArr = []
 bombArr = []
 rocketArr = []
+lightArr = []
+
 
 matrix = [];
 
@@ -83,9 +86,12 @@ function work() {
     for (let i = 0; i < rocketArr.length; i++) {
         rocketArr[i].fly()
     }
+    for (let i = 0; i < lightArr.length; i++) {
+        lightArr[i].lightning()
+    }
     io.sockets.emit('sm', matrix)
 }
-setInterval(work, 10)
+setInterval(work, 500)
 
 
 function bomb_plant() {
@@ -111,14 +117,58 @@ function rocket_plant() {
     }
     io.sockets.emit('sm', matrix);
 }
+////////////
+
 function light_plant() {
-    console.log("lightning")
+   
+    let x = Math.floor(Math.random() * matrix[0].length)
+    let y = Math.floor(Math.random() * matrix.length)
+    matrix[y][x] = 6
+    console.log("Light Planted")
+    lightArr.push(new Light(x, y))
     io.sockets.emit('sm', matrix);
+    
 }
 
+////////////
+
+function weather() {
+    if (weath == "winter") {
+        weath = "spring"
+        console.log(657326757236758236758267538);
+        
+    }
+    else if (weath == "spring") {
+        weath = "summer"
+    }
+    else if (weath == "summer") {
+        weath = "autumn"
+        
+    }
+    else if (weath == "autumn") {
+        weath = "winter"
+    }
+    io.sockets.emit('weather', weath)
+}
+setInterval(weather, 5000);
+
+///////////
 io.on('connection', function (socket) {
     generator();
     socket.on("bomb", bomb_plant);
     socket.on("rocket", rocket_plant);
     socket.on("light", light_plant)
 });
+// var statistics = {};
+
+// setInterval(function() {
+//     statistics.grass = grassArr.length;   
+//     statistics.grassEater = grassEaterArr.length;
+//     statistics.Predator = predatorArr.length;
+//     statistics.Bomb = bombArr.length;
+//     statistics.Rocket = rocketArr.length;
+//     statistics.Light = lightArr.length;
+//     fs.writeFile("statistics.json", JSON.stringify(statistics), function(){
+//         console.log("send")
+//     })
+// },1000)
